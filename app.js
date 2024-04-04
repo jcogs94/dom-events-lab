@@ -95,12 +95,19 @@ const equalsCalculation = () => {
 
     // updates the first entry so the user can continue math with that value
     entry1 = String(total);
+    operatorType = emptyEntry;
 
     displayElement.innerText = total;
 }
 
 // stores the type of operator in variable and logs that an operator has been pressed
 const operatorHandler = (operatorButton) => {
+    if (equalsPressed) {
+        equalsPressed = false;
+        entry2 = emptyEntry;
+        displayEntry2 = false;
+    }
+
     // add functionality for if user wants to make multiple calculations without hitting equals
     if (operatorPressed && entry2 !== emptyEntry) {
         equalsCalculation();
@@ -112,18 +119,18 @@ const operatorHandler = (operatorButton) => {
 
     //updates operator and ensures cleared second entry for next number
     operatorType = operatorButton.target.innerText;
-    if (equalsPressed) {
-        equalsPressed = false;
-        entry2 = emptyEntry;
-    }
 }
 
 const equalsHandler = () => {
     // checks if operator has been pressed, else all variables and display stay the same
-    if (operatorPressed) {
+    if (operatorPressed && entry2 !== emptyEntry) {
         equalsPressed = true;
         equalsCalculation();
+        // operatorPressed = false;
+    }
+    else {
         operatorPressed = false;
+        operatorType = emptyEntry;
     }
 }
 

@@ -7,8 +7,10 @@ let entry1 = noEntry;
 let entry2 = emptyEntry;
 let num1 = 0;
 let num2 = 0;
+let total = 0;
 let displayEntry2 = false;
 let operatorPressed = false;
+let equalsPressed = false;
 let operatorType = emptyEntry;
 
 /*------------------------ Cached Element References ------------------------*/
@@ -16,6 +18,7 @@ const numbersElement = document.querySelectorAll(".number");
 const displayElement = document.querySelector('.display');
 const clearElement = document.querySelector('#clear');
 const operatorElement = document.querySelectorAll(".operator");
+const equalsElement = document.querySelector('#equals');
 
 /*-------------------------------- Functions --------------------------------*/
 const numPressedHandler = (inputNum) => {
@@ -41,19 +44,45 @@ const clearHandler = () => {
     entry2 = emptyEntry;
     num1 = 0;
     num2 = 0;
+    total = 0;
     
     if (operatorPressed) {
         operatorPressed = false;
         operatorType = emptyEntry;
-        displayEntry2 = false
+        displayEntry2 = false;
+        equalsPressed = false;
     }
 
     displayElement.innerText = entry1;
 }
 
-const operatorHandler = (event) => {
+const operatorHandler = (operatorButton) => {
     operatorPressed = true;
-    operatorType = event.target.innerText;
+    operatorType = operatorButton.target.innerText;
+}
+
+const equalsHandler = () => {
+    if (entry2 !== emptyEntry) {
+        equalsPressed = true;
+        num1 = Number(entry1);
+        num2 = Number(entry2);
+        switch (operatorType) {
+            case '+':
+                total = num1 + num2;
+                break;
+            case '-':
+                total = num1 - num2;
+                break;
+            case '*':
+                total = num1 * num2;
+                break;
+            case '/':
+                total = num1 / num2;
+                break;
+        }
+        
+        displayElement.innerText = total;
+    }
 }
 
 /*----------------------------- Event Listeners -----------------------------*/
@@ -67,8 +96,10 @@ numbersElement.forEach(number => {
   });
 });
 
-operatorElement.forEach(operator => {
-    operator.addEventListener('click', operatorHandler);
+operatorElement.forEach(element => {
+    element.addEventListener('click', operatorHandler);
 })
 
 clearElement.addEventListener('click', clearHandler);
+
+equalsElement.addEventListener('click', equalsHandler);

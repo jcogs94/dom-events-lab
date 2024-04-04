@@ -15,9 +15,13 @@ let operatorType = emptyEntry;
 const numbersElement = document.querySelectorAll(".number");
 const displayElement = document.querySelector('.display');
 const clearElement = document.querySelector('#clear');
+const operatorElement = document.querySelectorAll(".operator");
 
 /*-------------------------------- Functions --------------------------------*/
 const numPressedHandler = (inputNum) => {
+    if (operatorPressed && !displayEntry2)
+        displayEntry2 = true;
+
     if (!displayEntry2 && entry1.length < 18) {
         if (entry1.length === 1 && entry1 === noEntry)
             entry1 = inputNum;
@@ -27,7 +31,8 @@ const numPressedHandler = (inputNum) => {
         displayElement.innerText = entry1;
     }
     else if (displayEntry2 && entry2.length < 18) {
-
+        entry2 += inputNum;
+        displayElement.innerText = entry2;
     }
 }
 
@@ -40,9 +45,15 @@ const clearHandler = () => {
     if (operatorPressed) {
         operatorPressed = false;
         operatorType = emptyEntry;
+        displayEntry2 = false
     }
 
     displayElement.innerText = entry1;
+}
+
+const operatorHandler = (event) => {
+    operatorPressed = true;
+    operatorType = event.target.innerText;
 }
 
 /*----------------------------- Event Listeners -----------------------------*/
@@ -55,5 +66,9 @@ numbersElement.forEach(number => {
     numPressedHandler(event.target.innerText);
   });
 });
+
+operatorElement.forEach(operator => {
+    operator.addEventListener('click', operatorHandler);
+})
 
 clearElement.addEventListener('click', clearHandler);

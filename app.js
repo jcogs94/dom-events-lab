@@ -72,9 +72,44 @@ const clearHandler = () => {
     displayElement.innerText = entry1;
 }
 
+// separated the calculations out in its own function to be used without pressing equals
+const equalsCalculation = () => {
+    // strings to numbers
+    num1 = Number(entry1);
+    num2 = Number(entry2);
+    // decides mathematical operation and stores result in total
+    switch (operatorType) {
+        case '+':
+            total = num1 + num2;
+            break;
+        case '-':
+            total = num1 - num2;
+            break;
+        case '*':
+            total = num1 * num2;
+            break;
+        case '/':
+            total = num1 / num2;
+            break;
+    }
+
+    // updates the first entry so the user can continue math with that value
+    entry1 = String(total);
+
+    displayElement.innerText = total;
+}
+
 // stores the type of operator in variable and logs that an operator has been pressed
 const operatorHandler = (operatorButton) => {
-    operatorPressed = true;
+    // add functionality for if user wants to make multiple calculations without hitting equals
+    if (operatorPressed && entry2 !== emptyEntry) {
+        equalsCalculation();
+        entry2 = emptyEntry;
+    }
+    else
+        operatorPressed = true;
+
+    //updates operator and ensures cleared second entry for next number
     operatorType = operatorButton.target.innerText;
     if (equalsPressed) {
         equalsPressed = false;
@@ -86,29 +121,8 @@ const equalsHandler = () => {
     // checks if operator has been pressed, else all variables and display stay the same
     if (operatorPressed) {
         equalsPressed = true;
-        // strings to numbers
-        num1 = Number(entry1);
-        num2 = Number(entry2);
-        // decides mathematical operation and stores result in total
-        switch (operatorType) {
-            case '+':
-                total = num1 + num2;
-                break;
-            case '-':
-                total = num1 - num2;
-                break;
-            case '*':
-                total = num1 * num2;
-                break;
-            case '/':
-                total = num1 / num2;
-                break;
-        }
-
-        // updates the first entry so the user can continue math with that value
-        entry1 = String(total);
-        
-        displayElement.innerText = total;
+        equalsCalculation();
+        operatorPressed = false;
     }
 }
 

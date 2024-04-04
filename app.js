@@ -1,6 +1,7 @@
 /*-------------------------------- Constants --------------------------------*/
 const noEntry = '0';
 const emptyEntry = '';
+const maxCharacters = 18;
 
 /*-------------------------------- Variables --------------------------------*/
 let entry1 = noEntry;
@@ -21,6 +22,7 @@ const operatorElement = document.querySelectorAll(".operator");
 const equalsElement = document.querySelector('#equals');
 
 /*-------------------------------- Functions --------------------------------*/
+// resets variable values for each new calculation
 const clear = () => {
     entry2 = emptyEntry;
     num1 = 0;
@@ -35,15 +37,21 @@ const clear = () => {
     }
 }
 
+// decides which "entry" string to add the entered key to and updates display
 const numPressedHandler = (inputNum) => {
+    // calls variables if a number is pressed after equals
     if (equalsPressed) {
         entry1 = emptyEntry;
         clear();
     }
+
+    // switches to second "entry" after an operator is pressed
     if (operatorPressed && !displayEntry2)
         displayEntry2 = true;
 
-    if (!displayEntry2 && entry1.length < 18) {
+    // adds current number press to entry if it doesn't exceed max characters
+    if (!displayEntry2 && entry1.length < maxCharacters) {
+        // if first number, replaces starting zero, esle adds to entry
         if (entry1.length === 1 && entry1 === noEntry)
             entry1 = inputNum;
         else
@@ -51,19 +59,20 @@ const numPressedHandler = (inputNum) => {
         
         displayElement.innerText = entry1;
     }
-    else if (displayEntry2 && entry2.length < 18) {
+    else if (displayEntry2 && entry2.length < maxCharacters) {
         entry2 += inputNum;
         displayElement.innerText = entry2;
     }
 }
 
+// calls clear() to reset variables when C is pushed
 const clearHandler = () => {
     entry1 = noEntry;
     clear();
-    
     displayElement.innerText = entry1;
 }
 
+// stores the type of operator in variable and logs that an operator has been pressed
 const operatorHandler = (operatorButton) => {
     operatorPressed = true;
     operatorType = operatorButton.target.innerText;
@@ -74,10 +83,13 @@ const operatorHandler = (operatorButton) => {
 }
 
 const equalsHandler = () => {
+    // checks if operator has been pressed, else all variables and display stay the same
     if (operatorPressed) {
         equalsPressed = true;
+        // strings to numbers
         num1 = Number(entry1);
         num2 = Number(entry2);
+        // decides mathematical operation and stores result in total
         switch (operatorType) {
             case '+':
                 total = num1 + num2;
@@ -93,6 +105,7 @@ const equalsHandler = () => {
                 break;
         }
 
+        // updates the first entry so the user can continue math with that value
         entry1 = String(total);
         
         displayElement.innerText = total;

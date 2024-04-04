@@ -105,6 +105,7 @@ const operatorHandler = (operatorButton) => {
     if (operatorPressed && entry2 !== emptyEntry) {
         equalsCalculation();
         entry2 = emptyEntry;
+        displayEntry2 = false;
     }
     else
         operatorPressed = true;

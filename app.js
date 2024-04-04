@@ -21,7 +21,25 @@ const operatorElement = document.querySelectorAll(".operator");
 const equalsElement = document.querySelector('#equals');
 
 /*-------------------------------- Functions --------------------------------*/
+const clear = () => {
+    entry2 = emptyEntry;
+    num1 = 0;
+    num2 = 0;
+    total = 0;
+    
+    if (operatorPressed) {
+        operatorPressed = false;
+        operatorType = emptyEntry;
+        displayEntry2 = false;
+        equalsPressed = false;
+    }
+}
+
 const numPressedHandler = (inputNum) => {
+    if (equalsPressed) {
+        entry1 = emptyEntry;
+        clear();
+    }
     if (operatorPressed && !displayEntry2)
         displayEntry2 = true;
 
@@ -41,28 +59,22 @@ const numPressedHandler = (inputNum) => {
 
 const clearHandler = () => {
     entry1 = noEntry;
-    entry2 = emptyEntry;
-    num1 = 0;
-    num2 = 0;
-    total = 0;
+    clear();
     
-    if (operatorPressed) {
-        operatorPressed = false;
-        operatorType = emptyEntry;
-        displayEntry2 = false;
-        equalsPressed = false;
-    }
-
     displayElement.innerText = entry1;
 }
 
 const operatorHandler = (operatorButton) => {
     operatorPressed = true;
     operatorType = operatorButton.target.innerText;
+    if (equalsPressed) {
+        equalsPressed = false;
+        entry2 = emptyEntry;
+    }
 }
 
 const equalsHandler = () => {
-    if (entry2 !== emptyEntry) {
+    if (operatorPressed) {
         equalsPressed = true;
         num1 = Number(entry1);
         num2 = Number(entry2);
@@ -80,6 +92,8 @@ const equalsHandler = () => {
                 total = num1 / num2;
                 break;
         }
+
+        entry1 = String(total);
         
         displayElement.innerText = total;
     }
